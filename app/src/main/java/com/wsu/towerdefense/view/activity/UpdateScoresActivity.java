@@ -86,10 +86,6 @@ public class UpdateScoresActivity extends Activity {
             return;
         }
 
-        if (this.playerUsername.toUpperCase().equals("THE BIG MAN")){
-            new BasicSoundPlayer(this, R.raw.thebigman, true).play(this, 100);
-        }
-
         DBTools dbt = new DBTools();
         dbt.initUsernameAndScore(this.playerUsername, this.playerScore, this.playerDifficulty);
         dbt.execute();
@@ -134,7 +130,7 @@ public class UpdateScoresActivity extends Activity {
             }
 
             gifImageView.setBackgroundResource(
-                hasWon ? R.drawable.you_win : R.drawable.you_lose_pickle
+                hasWon ? R.drawable.you_win : R.drawable.you_lose_regular
             );
 
         }
