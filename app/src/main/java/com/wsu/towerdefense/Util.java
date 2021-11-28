@@ -112,11 +112,8 @@ public class Util {
         );
     }
 
-    public static Bitmap getBitmapByID(Context context, int resourceID) {
-        return BitmapFactory.decodeResource(
-            context.getResources(),
-            resourceID
-        );
+    public static Bitmap getBitmapByID(int resourceID) {
+        return BitmapFactory.decodeResource(Application.getContext().getResources(), resourceID);
     }
 
     public static int dpToPixels(Resources resources, int dp) {

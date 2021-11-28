@@ -1,7 +1,7 @@
 package com.wsu.towerdefense;
 
-import com.wsu.towerdefense.Model.Enemy;
-import com.wsu.towerdefense.Model.Waves;
+import com.wsu.towerdefense.model.Enemy;
+import com.wsu.towerdefense.model.Waves;
 
 import junit.framework.TestCase;
 

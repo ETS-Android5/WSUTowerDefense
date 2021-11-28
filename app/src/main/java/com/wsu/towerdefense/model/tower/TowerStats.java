@@ -1,11 +1,11 @@
-package com.wsu.towerdefense.Model.tower;
+package com.wsu.towerdefense.model.tower;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import com.wsu.towerdefense.Application;
-import com.wsu.towerdefense.Model.Projectile;
-import com.wsu.towerdefense.Model.tower.Upgrade.Effect;
-import com.wsu.towerdefense.Model.tower.Upgrade.StatType;
+
+import com.wsu.towerdefense.model.Projectile;
+import com.wsu.towerdefense.model.tower.Upgrade.Effect;
+import com.wsu.towerdefense.model.tower.Upgrade.StatType;
 import com.wsu.towerdefense.Util;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -69,7 +69,7 @@ public class TowerStats implements Serializable {
         this.canSeeInvisible = type.canSeeInvisible;
         this.projectileType = type.projectileType;
         this.turretImageID = type.towerResID;
-        this.turretImage = Util.getBitmapByID(context, type.towerResID);
+        this.turretImage = Util.getBitmapByID(type.towerResID);
     }
 
     /**
@@ -305,6 +305,6 @@ public class TowerStats implements Serializable {
         in.defaultReadObject();
 
         upgradeData = UpgradeReader.get(type);
-        turretImage = Util.getBitmapByID(Application.context, turretImageID);
+        turretImage = Util.getBitmapByID(turretImageID);
     }
 }

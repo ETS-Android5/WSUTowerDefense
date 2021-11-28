@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import com.wsu.towerdefense.Model.Game;
+import com.wsu.towerdefense.model.Game;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -31,7 +31,7 @@ public abstract class AbstractMapObject implements Serializable {
     public AbstractMapObject(Context context, PointF location, int resourceID) {
         this.location = location;
         this.resourceID = resourceID;
-        this.bitmap = Util.getBitmapByID(context, resourceID);
+        this.bitmap = Util.getBitmapByID(resourceID);
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class AbstractMapObject implements Serializable {
         float y = in.readFloat();
 
         this.bitmap = BitmapFactory.decodeResource(
-            Application.context.getResources(),
+            Application.getContext().getResources(),
             this.resourceID
         );
         this.location = new PointF(x, y);

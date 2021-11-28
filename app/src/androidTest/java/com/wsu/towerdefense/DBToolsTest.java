@@ -1,9 +1,9 @@
 package com.wsu.towerdefense;
 
-import static com.wsu.towerdefense.Model.Highscores.DBListener.*;
+import static com.wsu.towerdefense.model.highscores.DBListener.*;
 import static org.junit.Assert.assertEquals;
-import com.wsu.towerdefense.Model.Highscores.DBConnection;
-import com.wsu.towerdefense.Model.Highscores.DBTools;
+import com.wsu.towerdefense.model.highscores.DBConnection;
+import com.wsu.towerdefense.model.highscores.DBTools;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

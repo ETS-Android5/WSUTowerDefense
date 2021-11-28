@@ -11,9 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.mysql.jdbc.StringUtils;
-import com.wsu.towerdefense.audio.BasicSoundPlayer;
 import com.wsu.towerdefense.audio.Music;
-import com.wsu.towerdefense.Model.Highscores.DBTools;
+import com.wsu.towerdefense.model.highscores.DBTools;
 import com.wsu.towerdefense.R;
 
 import com.wsu.towerdefense.Util;

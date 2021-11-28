@@ -1,4 +1,4 @@
-package com.wsu.towerdefense.Model.Highscores;
+package com.wsu.towerdefense.model.highscores;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +13,7 @@ public class DBConnection {
             String port = "3306";
             String password = "Towerdefense321";
 
-            String dbName = testing ? "HighscoresTest" : "Highscores";
+            String dbName = testing ? "HighscoresTest" : "highscores";
             String hostname = "databaseclassdb.cznsvkc1cyzq.us-east-1.rds.amazonaws.com";
 
             String jdbcUrl = "jdbc:mysql://" + hostname + ":" + port + "/" + dbName + "?user=" + userName + "&password=" + password;

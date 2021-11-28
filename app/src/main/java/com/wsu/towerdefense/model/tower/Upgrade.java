@@ -1,4 +1,4 @@
-package com.wsu.towerdefense.Model.tower;
+package com.wsu.towerdefense.model.tower;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -48,7 +48,7 @@ public class Upgrade {
         this.description = description;
         this.cost = cost;
         this.imageID = imageID;
-        this.image = Util.getBitmapByID(context, imageID);
+        this.image = Util.getBitmapByID(imageID);
         this.effects = effects;
     }
 }

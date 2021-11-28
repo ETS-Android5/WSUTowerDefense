@@ -1,4 +1,4 @@
-package com.wsu.towerdefense.Model.Highscores;
+package com.wsu.towerdefense.model.highscores;
 
 import android.os.AsyncTask;
 

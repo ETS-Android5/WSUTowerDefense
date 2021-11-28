@@ -1,9 +1,9 @@
-package com.wsu.towerdefense.Model.save;
+package com.wsu.towerdefense.model.save;
 
-import com.wsu.towerdefense.Model.Waves;
-import com.wsu.towerdefense.Model.tower.Tower;
-import com.wsu.towerdefense.Model.Game;
-import com.wsu.towerdefense.Model.Game.Difficulty;
+import com.wsu.towerdefense.model.Waves;
+import com.wsu.towerdefense.model.tower.Tower;
+import com.wsu.towerdefense.model.Game;
+import com.wsu.towerdefense.model.Game.Difficulty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

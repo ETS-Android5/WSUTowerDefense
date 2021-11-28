@@ -1,9 +1,11 @@
-package com.wsu.towerdefense.Model;
+package com.wsu.towerdefense.model;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.wsu.towerdefense.R;
+import com.wsu.towerdefense.model.enemy.Enemy;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +20,7 @@ import org.json.JSONObject;
 
 /**
  * Each wave is split up into sets. Each set contains an Enemy.Type, amount of enemies to be
- * spawned, and a delay to wait before spawning the next enemy.
+ * spawned, and a delay to wait before spawning the next Enemy.
  *
  */
 public class Waves implements Serializable {
@@ -39,6 +41,7 @@ public class Waves implements Serializable {
     List<List<Double>> delays;
     List<List<Double>> setDelays;
     List<List<Enemy.Type>> types;
+    List<List<Boolean>> invisibles;
 
     /**
      * Constructor which uses {@link #parseWaves(Context, String)} to populate List values
@@ -50,6 +53,7 @@ public class Waves implements Serializable {
         delays = new ArrayList<>();
         setDelays = new ArrayList<>();
         types = new ArrayList<>();
+        invisibles = new ArrayList<>();
         wavesToWin = difficulty.waves;
 
         try {
@@ -79,7 +83,8 @@ public class Waves implements Serializable {
             updateTimeSinceSpawn(delta);
 
             if ((setStarted || setDelayPassed()) && delayPassed()) {
-                    game.spawnEnemy(next());
+                    game.spawnEnemy(nextEnemyType(), nextEnemyInvisible());
+                    progressWave();
             }
         }
     }
@@ -92,8 +97,8 @@ public class Waves implements Serializable {
      * represents a wave. each value within the arrays represents a set.
      * <ul>
      *     <li><code>amounts</code> : The amount of enemies that must be spawned before the set is incremented. </li>
-     *     <li><code>delays</code> : The amount of time which must pass between spawning each enemy for a given set.</li>
-     *     <li><code>types</code> : The type of enemy to spawn for a given set</li>
+     *     <li><code>delays</code> : The amount of time which must pass between spawning each Enemy for a given set.</li>
+     *     <li><code>types</code> : The type of Enemy to spawn for a given set</li>
      * </ul>
      *
      * @param context   Used to access files through context.getAssets
@@ -113,6 +118,7 @@ public class Waves implements Serializable {
         JSONArray d = waveReader.getJSONArray("delays");
         JSONArray sd = waveReader.getJSONArray("set_delays");
         JSONArray t = waveReader.getJSONArray("types");
+        JSONArray v = waveReader.getJSONArray("invisibles");
 
         maxWaves = a.length();
 
@@ -122,18 +128,20 @@ public class Waves implements Serializable {
             delays.add(new ArrayList<>());
             setDelays.add(new ArrayList<>());
             types.add(new ArrayList<>());
+            invisibles.add(new ArrayList<>());
 
             for (int j = 0; j < a.getJSONArray(i).length(); j++) {
                 amounts.get(i).add(a.getJSONArray(i).getInt(j));
                 delays.get(i).add(d.getJSONArray(i).getDouble(j));
                 setDelays.get(i).add(sd.getJSONArray(i).getDouble(j));
                 types.get(i).add(Enemy.Type.valueOf(t.getJSONArray(i).getString(j)));
+                invisibles.get(i).add(v.getJSONArray(i).getBoolean(j));
             }
         }
     }
 
     /**
-     * helper function of {@link #next()} which increments spawned, set and wave accordingly
+     * helper function which increments spawned, set and wave accordingly
      */
     private void progressWave(){
         spawnedThisSet++;
@@ -160,12 +168,14 @@ public class Waves implements Serializable {
     }
 
     /**
-     * @return current enemyType and progresses Wave
+     * @return next Enemy Type to spawn
      */
-    public Enemy.Type next(){
-        Enemy.Type tempType = types.get(curWave - 1).get(curSet);
-        progressWave();
-        return tempType;
+    public Enemy.Type nextEnemyType(){
+        return types.get(curWave - 1).get(curSet);
+    }
+
+    public boolean nextEnemyInvisible() {
+        return invisibles.get(curWave - 1).get(curSet);
     }
 
     public void updateTimeSinceSpawn(double delta){

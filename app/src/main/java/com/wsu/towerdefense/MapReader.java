@@ -116,6 +116,6 @@ public class MapReader {
             throw new FileNotFoundException("Map image not found");
         }
 
-        return new AbstractMap(context, name, displayName, imageID, pathList, pathRadius);
+        return new AbstractMap(name, displayName, imageID, pathList, pathRadius);
     }
 }

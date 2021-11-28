@@ -2,7 +2,7 @@ package com.wsu.towerdefense;
 
 import android.content.Context;
 import android.util.Log;
-import com.wsu.towerdefense.Model.tower.UpgradeReader;
+import com.wsu.towerdefense.model.tower.UpgradeReader;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ public class Application extends android.app.Application {
 
     public static final boolean DEBUG = false;
 
-    public static Context context;
+    public static Application instance;
 
     @Override
     public void onCreate() {
@@ -22,7 +22,7 @@ public class Application extends android.app.Application {
      * Run once per application
      */
     private void init() {
-        context = getApplicationContext();
+        instance = this;
 
         // initialize maps
         try {
@@ -37,5 +37,9 @@ public class Application extends android.app.Application {
         } catch (IOException e) {
             Log.e(getString(R.string.logcatKey), "Error while initializing upgrades", e);
         }
+    }
+
+    public static Context getContext() {
+        return instance.getApplicationContext();
     }
 }

@@ -1,7 +1,7 @@
 package com.wsu.towerdefense;
 
-import com.wsu.towerdefense.Model.Enemy;
-import com.wsu.towerdefense.Model.tower.Tower;
+import com.wsu.towerdefense.model.enemy.Enemy;
+import com.wsu.towerdefense.model.tower.Tower;
 
 public abstract class MapEvent {
 

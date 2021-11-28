@@ -1,4 +1,4 @@
-package com.wsu.towerdefense.Model.tower;
+package com.wsu.towerdefense.model.tower;
 
 
 import android.content.Context;
@@ -7,14 +7,15 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import com.wsu.towerdefense.AbstractMapObject;
-import com.wsu.towerdefense.Model.Enemy;
-import com.wsu.towerdefense.Model.Projectile;
+import com.wsu.towerdefense.model.enemy.Enemy;
+import com.wsu.towerdefense.model.Projectile;
 import com.wsu.towerdefense.audio.AdvancedSoundPlayer;
 import com.wsu.towerdefense.audio.SoundSource;
-import com.wsu.towerdefense.Model.Game;
+import com.wsu.towerdefense.model.Game;
 import com.wsu.towerdefense.R;
 import com.wsu.towerdefense.Settings;
 import com.wsu.towerdefense.Util;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -296,12 +297,10 @@ public class Tower extends AbstractMapObject implements Serializable, SoundSourc
             List<Enemy> enemies = game.getEnemies();
             for (int i = 0; i < enemies.size(); i++) {
                 Enemy e = enemies.get(i);
-                if (distanceToEnemy(e) < stats.getRange()) {
-                    if (!e.isInvisible() || (e.isInvisible() && stats.canSeeInvisible())) {
+                if (distanceToEnemy(e) < stats.getRange() &&
+                    (!e.isInvisible() || stats.canSeeInvisible())) {
                         target = e;
-
                         break; // Stop looking for a target
-                    }
                 }
             }
         }
@@ -310,7 +309,7 @@ public class Tower extends AbstractMapObject implements Serializable, SoundSourc
         timeSinceShot += delta;
 
         if (this.type.turns && target != null) {
-            angle = (float) Util.getAngleBetweenPoints(location, target.getLocation());
+            angle = (float) Util.getAngleBetweenPoints(location, target.getPosition());
         }
 
         // Shoot another projectile if there is a target and enough time has passed
@@ -380,16 +379,16 @@ public class Tower extends AbstractMapObject implements Serializable, SoundSourc
      * A helper method that calculates the distance from the center of this Tower to the center of a
      * given Enemy
      *
-     * @param enemy The Enemy object to calculate the distance to
-     * @return A double representing the distance to the enemy
+     * @param Enemy The Enemy object to calculate the distance to
+     * @return A double representing the distance to the Enemy
      */
-    private double distanceToEnemy(Enemy enemy) {
-        if (enemy == null) {
+    private double distanceToEnemy(Enemy Enemy) {
+        if (Enemy == null) {
             return -1;
         }
 
-        float a = Math.abs(location.x - enemy.getLocation().x);
-        float b = Math.abs(location.y - enemy.getLocation().y);
+        float a = Math.abs(location.x - Enemy.getPosition().x);
+        float b = Math.abs(location.y - Enemy.getPosition().y);
         return Math.hypot(a, b);
     }
 

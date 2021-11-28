@@ -19,9 +19,9 @@ public class AbstractMap {
     protected final List<PointF> path;
     protected final float pathRadius;
 
-    public AbstractMap(Context context, String name, String displayName, int imageID,
+    public AbstractMap(String name, String displayName, int imageID,
         List<PointF> path, float pathRadius) {
-        this(name, displayName, imageID, Util.getBitmapByID(context, imageID), path, pathRadius);
+        this(name, displayName, imageID, Util.getBitmapByID(imageID), path, pathRadius);
     }
 
     public AbstractMap(String name, String displayName, int imageID, Bitmap image,

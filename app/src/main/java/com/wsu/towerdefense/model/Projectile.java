@@ -1,4 +1,4 @@
-package com.wsu.towerdefense.Model;
+package com.wsu.towerdefense.model;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,9 @@ import android.graphics.PointF;
 import com.wsu.towerdefense.AbstractMapObject;
 import com.wsu.towerdefense.audio.BasicSoundPlayer;
 import com.wsu.towerdefense.audio.SoundSource;
-import com.wsu.towerdefense.Model.tower.Tower;
+import com.wsu.towerdefense.model.enemy.ArmoredSlime;
+import com.wsu.towerdefense.model.enemy.Enemy;
+import com.wsu.towerdefense.model.tower.Tower;
 import com.wsu.towerdefense.R;
 import com.wsu.towerdefense.Settings;
 import com.wsu.towerdefense.Util;
@@ -35,7 +37,7 @@ public class Projectile extends AbstractMapObject implements SoundSource {
             Behavior.LINEAR,
             1000f,
             10,
-            2
+            1
         ),
 
         ROCKET(
@@ -214,7 +216,7 @@ public class Projectile extends AbstractMapObject implements SoundSource {
         this.pierceModifier = pierceModifier;
         this.slowTime = slowTime;
         this.slowRate = slowRate;
-        initTargetLocation = target.getLocation();
+        initTargetLocation = target.getPosition();
 
         this.velX = (float) (getEffectiveSpeed() * Math.cos(Math.toRadians(angle)));
         this.velY = (float) (getEffectiveSpeed() * Math.sin(Math.toRadians(angle)));
@@ -242,7 +244,7 @@ public class Projectile extends AbstractMapObject implements SoundSource {
             case HOMING: {
                 if (this.target.isAlive()) {
                     double angle = Util.getAngleBetweenPoints(this.location,
-                            this.target.getLocation()
+                            this.target.getPosition()
                         );
 
                     this.velX = (float) (getEffectiveSpeed() * Math.cos(Math.toRadians(angle)));
@@ -257,7 +259,7 @@ public class Projectile extends AbstractMapObject implements SoundSource {
             }
             case HITSCAN: {
                 if (this.target.isAlive()) {
-                    this.target.hitByProjectile(this);
+                    this.target.takeDamage((int) getEffectiveDamage());
                     this.handleKillCount(target);
                 }
 
@@ -327,7 +329,7 @@ public class Projectile extends AbstractMapObject implements SoundSource {
 
     private Enemy checkCollision(List<Enemy> enemies) {
         for (Enemy e : enemies) {
-            if (e.collides(location.x, location.y,
+            if (e.collidesWithHitbox(location.x, location.y,
                 bitmap.getWidth() * hitboxScaleX,
                 bitmap.getHeight() * hitboxScaleY)
             ) {
@@ -339,7 +341,16 @@ public class Projectile extends AbstractMapObject implements SoundSource {
 
     private void handleCollision(Context context, Enemy e){
         if(e != null && isActive){
-            e.hitByProjectile(this);
+            if (this.type.slowRate < 1.0) {
+                e.slow(this.slowTime, this.slowRate);
+            }
+            e.takeDamage((int) this.getEffectiveDamage());
+
+            if (e instanceof ArmoredSlime) {
+                int armorDamage = this.type.armorPiercing ? 1 : 0;
+                ((ArmoredSlime) e).damageArmor(armorDamage);
+            }
+
             handleKillCount(e);
             if(++hits >= getEffectivePierce()){
                 remove(context);
@@ -412,10 +423,10 @@ public class Projectile extends AbstractMapObject implements SoundSource {
         // don't release audioImpact field to allow sound to play after projectile is removed
     }
 
-    private void handleKillCount(Enemy enemy) {
-        if (!enemy.isAlive() && !enemy.getHasBeenKilled()) {
+    private void handleKillCount(Enemy Enemy) {
+        if (!Enemy.isAlive()) {//&& !Enemy.getHasBeenKilled()) {
             this.parentTower.incrementKillCount();
-            enemy.setHasBeenKilled(true);
+//            Enemy.setHasBeenKilled(true);
         }
     }
 }

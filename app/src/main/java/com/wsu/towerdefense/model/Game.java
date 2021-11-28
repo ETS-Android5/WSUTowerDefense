@@ -1,4 +1,4 @@
-package com.wsu.towerdefense.Model;
+package com.wsu.towerdefense.model;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,17 +7,21 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
+import android.widget.Switch;
+
 import com.wsu.towerdefense.AbstractGame;
 import com.wsu.towerdefense.MapReader;
-import com.wsu.towerdefense.Model.Enemy.Type;
+import com.wsu.towerdefense.model.enemy.ArmoredSlime;
+import com.wsu.towerdefense.model.enemy.Enemy;
 import com.wsu.towerdefense.audio.AdvancedSoundPlayer;
 import com.wsu.towerdefense.audio.BasicSoundPlayer;
 import com.wsu.towerdefense.audio.SoundSource;
 import com.wsu.towerdefense.map.Map;
-import com.wsu.towerdefense.Model.tower.Tower;
+import com.wsu.towerdefense.model.enemy.Slime;
+import com.wsu.towerdefense.model.tower.Tower;
 import com.wsu.towerdefense.MapEvent;
-import com.wsu.towerdefense.Model.save.SaveState;
-import com.wsu.towerdefense.Model.save.Serializer;
+import com.wsu.towerdefense.model.save.SaveState;
+import com.wsu.towerdefense.model.save.Serializer;
 import com.wsu.towerdefense.R;
 import com.wsu.towerdefense.Settings;
 import java.io.IOException;
@@ -29,7 +33,7 @@ import java.util.List;
 public class Game extends AbstractGame implements SoundSource {
 
     private static final int START_LIVES = 25;
-    private static final int START_MONEY = 400;
+    private static final int START_MONEY = 10000;
     private static final int START_SCORE = 0;
 
     private static final int RANGE_OPACITY = 90;
@@ -133,15 +137,15 @@ public class Game extends AbstractGame implements SoundSource {
     protected void update(double delta) {
 
         // Update the Enemies, remove any dead Enemies
-        for (Iterator<Enemy> enemyIt = enemies.iterator(); enemyIt.hasNext(); ) {
-            Enemy e = enemyIt.next();
+        for (Iterator<Enemy> EnemyIt = enemies.iterator(); EnemyIt.hasNext(); ) {
+            Enemy e = EnemyIt.next();
 
             if (e.isAlive()) {
-                e.update(this, delta);
+                e.update(delta);
 
                 if (e.isAtPathEnd()) {
-                    lives -= e.getType().getDamage();
-                    enemyIt.remove();
+                    lives -= e.getDamage();
+                    EnemyIt.remove();
                     if (lives <= 0) {
                         lives = 0;
                         gameOver(false);
@@ -149,12 +153,12 @@ public class Game extends AbstractGame implements SoundSource {
                     audioLoseLife.play(getContext(), Settings.getSFXVolume(getContext()));
                 }
             } else {
-                // Add enemy's value to game balance and score
-                addMoney((int) (e.getPrice() * difficulty.priceModifier));
-                addScore((int) (e.getPrice() * difficulty.priceModifier));
+                // Add Enemy's value to game balance and score
+                addMoney((int) (e.getDropValue() * difficulty.priceModifier));
+                addScore((int) (e.getDropValue() * difficulty.priceModifier));
 
                 // Remove dead Enemies
-                enemyIt.remove();
+                EnemyIt.remove();
             }
         }
 
@@ -354,8 +358,24 @@ public class Game extends AbstractGame implements SoundSource {
     }
 
     // SpawnEnemy event
-    public void spawnEnemy(Type type) {
-        mapEvents.add(new MapEvent.SpawnEnemy(new Enemy(getContext(), type, map.getPath())));
+    public void spawnEnemy(Enemy.Type type, boolean invisible) {
+        Enemy e;
+
+        switch (type) {
+            case SLIME:
+                e = new Slime(Slime.Level.ONE, map.getPath());
+                break;
+
+            case ARMORED_SLIME:
+                e = new ArmoredSlime(ArmoredSlime.Level.ONE, map.getPath());
+                break;
+
+            default:
+                e = null;
+        }
+        e.setInvisible(invisible);
+
+        mapEvents.add(new MapEvent.SpawnEnemy(e));
     }
 
     // DIFFICULTY ENUM

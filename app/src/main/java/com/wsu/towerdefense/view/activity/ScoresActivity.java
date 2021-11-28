@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.wsu.towerdefense.Model.Game.Difficulty;
+import com.wsu.towerdefense.model.Game.Difficulty;
 import com.wsu.towerdefense.audio.AdvancedSoundPlayer;
-import com.wsu.towerdefense.Model.Highscores.DBTools;
+import com.wsu.towerdefense.model.highscores.DBTools;
 import com.wsu.towerdefense.R;
 import com.wsu.towerdefense.Settings;
 
