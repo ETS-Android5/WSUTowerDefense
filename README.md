@@ -1,6 +1,8 @@
-# Tower Defense
+<h1 align="center">Tower Defense</h1>
 
-A Westfield State University themed tower defense game for Android.
+<p align="center">A Westfield State University themed tower defense game for Android.</p>
+
+<img width="1010" alt="home" src="https://user-images.githubusercontent.com/70703647/143954046-7b1289ee-e651-47ad-883b-8461de9c763f.png">
 
 ## Table of Contents
 
